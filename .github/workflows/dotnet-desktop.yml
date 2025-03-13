@@ -1,0 +1,54 @@
+name: .NET Core
+
+on:
+  push:
+    branches: [ master ]
+    
+jobs:
+  Deploy:
+
+    runs-on: ubuntu-latest
+    env:
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+        cache: true
+        cache-dependency-path: |
+          Core/packages.lock.json
+          WebHook/packages.lock.json
+         
+    - name: DotNet Restore
+      run: dotnet restore --locked-mode
+    
+    - name: DotNet Publish
+      run: dotnet publish ./WebHook/WebHook.csproj -c Release -r linux-x64 -p:PublishReadyToRun=true --self-contained false
+      
+    - name: Copy to Server via SCP
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.REMOTE_HOST }}
+        port: 10022
+        username: ${{ secrets.REMOTE_USER }}
+        key: ${{ secrets.REMOTE_SSH_KEY }}
+        passphrase: ${{ secrets.PASSPHRASE }}
+        source: /home/runner/work/EGSNotifier/EGSNotifier/WebHook/bin/Release/net9.0/linux-x64/publish/*
+        target: /var/EGSNotifierBot_temp
+        rm: true
+      
+    - name: Deploy and restart service
+      uses: garygrossgarten/github-action-ssh@release
+      with:
+        command: |
+            systemctl stop EGSNotifierBot
+            rm -rf /var/EGSNotifierBot
+            mv /var/EGSNotifierBot_temp /var/EGSNotifierBot
+            systemctl start EGSNotifierBot
+        host: ${{ secrets.REMOTE_HOST }}
+        port: 10022
+        username: ${{ secrets.REMOTE_USER }}
+        passphrase: ${{ secrets.PASSPHRASE }}
+        privateKey: ${{ secrets.REMOTE_SSH_KEY }}
