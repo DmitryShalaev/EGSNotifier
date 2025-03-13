@@ -24,7 +24,7 @@ namespace Core.Jobs {
             // Определение триггера для запуска задания каждый час
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity("UpdateEGSJobTrigger", "group1") // Уникальный идентификатор триггера
-                .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(19, 30)) // Запуск ежедневно в 19:30
+                .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(16, 30)) // Запуск ежедневно
                 .Build();
 
             // Запуск планировщика
