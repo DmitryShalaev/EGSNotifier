@@ -73,6 +73,8 @@ namespace Core.Bot {
                             switch(message.Type) {
                                 case MessageType.Text:
                                     if(message.Text! == "/start") {
+                                        MessagesQueue.Message.SendTextMessage(chatId: messageFrom!, text: "✅ You have been successfully subscribed to Epic Games Store Free Games notifications!");
+
                                         DateTime today = DateTime.UtcNow;
                                         IQueryable<EGS> egs = dbContext.EGS.Where(i => i.StartDate <= today && today <= i.EndDate);
                                         foreach(EGS value in egs) {
@@ -84,11 +86,13 @@ namespace Core.Bot {
                                             $"End Date: {value.EndDate:MMM dd 'at' hh:mm tt 'UTC'}";
                                             InlineKeyboardMarkup replyMarkup = new InlineKeyboardMarkup().AddButton(InlineKeyboardButton.WithUrl("Game Page", value.Page));
 
-                                            MessagesQueue.Message.SendPhoto(chatId: messageFrom!, photo: value.Thumbnail, caption: SpecialCharacters.Escape(caption),
+                                            MessagesQueue.Message.SendPhoto(
+                                                chatId: messageFrom!,
+                                                photo: value.Thumbnail,
+                                                caption: SpecialCharacters.Escape(caption),
                                                 parseMode: ParseMode.MarkdownV2,
                                                 replyMarkup: replyMarkup
-                                                );
-
+                                            );
                                         }
                                     }
 

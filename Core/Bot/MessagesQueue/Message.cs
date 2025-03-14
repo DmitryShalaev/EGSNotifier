@@ -42,6 +42,12 @@ namespace Core.Bot.MessagesQueue {
 
         #region Messag
 
+        public static void SendTextMessage(ChatId chatId, string text, ReplyMarkup? replyMarkup = null, ParseMode parseMode = ParseMode.None, bool disableNotification = false) {
+            var message = new TextMessage(chatId, text, replyMarkup, parseMode, disableNotification);
+
+            AddMessageToQueue(message);
+        }
+
         public static void SendPhoto(ChatId chatId, InputFile photo, string? caption = null, ReplyMarkup? replyMarkup = null, string? path = null, bool hasSpoiler = false, bool disableNotification = false, ParseMode parseMode = ParseMode.None) {
             var message = new PhotoMessage(chatId, photo, caption, replyMarkup, path, hasSpoiler, disableNotification, parseMode);
 
@@ -56,7 +62,7 @@ namespace Core.Bot.MessagesQueue {
 
         #endregion
 
-        private static void AddMessageToQueue(PhotoMessage message) {
+        private static void AddMessageToQueue(IMessageQueue message) {
             (SemaphoreSlim semaphore, ConcurrentQueue<IMessageQueue> queue) user = userQueues.GetOrAdd(message.ChatId, _ => (new SemaphoreSlim(1, 1), new ConcurrentQueue<IMessageQueue>()));
 
             user.queue.Enqueue(message);
@@ -130,14 +136,14 @@ namespace Core.Bot.MessagesQueue {
 
                         if(string.IsNullOrWhiteSpace(textMessage.Text)) break;
 
-                        int newId = (await BotClient.SendMessage(
+                        await BotClient.SendMessage(
                                         chatId: textMessage.ChatId,
                                         text: textMessage.Text,
                                         parseMode: textMessage.ParseMode,
                                         linkPreviewOptions: true,
                                         disableNotification: textMessage.DisableNotification,
                                         replyMarkup: textMessage.ReplyMarkup
-                                    )).MessageId;
+                                    );
                         break;
 
                     case PhotoMessage photoMessage:
