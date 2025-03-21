@@ -1,4 +1,4 @@
-﻿using Core.DB;
+using Core.DB;
 using Core.Parser;
 
 using Quartz;
@@ -24,7 +24,10 @@ namespace Core.Jobs {
             // Определение триггера для запуска задания каждый час
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity("UpdateEGSJobTrigger", "group1") // Уникальный идентификатор триггера
-                .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(16, 30)) // Запуск ежедневно
+                .StartNow() // Запуск задания сразу после старта планировщика
+                .WithSimpleSchedule(x => x
+                    .WithIntervalInHours(1)
+                    .RepeatForever())
                 .Build();
 
             // Запуск планировщика
