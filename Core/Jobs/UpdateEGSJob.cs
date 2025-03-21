@@ -25,9 +25,7 @@ namespace Core.Jobs {
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity("UpdateEGSJobTrigger", "group1") // Уникальный идентификатор триггера
                 .StartNow() // Запуск задания сразу после старта планировщика
-                .WithSimpleSchedule(x => x
-                    .WithIntervalInHours(1)
-                    .RepeatForever())
+                .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(16, 30))
                 .Build();
 
             // Запуск планировщика
