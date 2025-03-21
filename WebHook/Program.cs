@@ -13,7 +13,7 @@ namespace WebHook {
     }
 
     public class Program {
-        public static void Main(string[] args) {
+        public static async Task Main(string[] args) {
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
             builder.Logging.SetMinimumLevel(LogLevel.Warning);
 
@@ -35,7 +35,15 @@ namespace WebHook {
             app.UseAuthorization();
             app.MapControllers();
 
-            app.Run();
+            app.RunAsync();
+
+        using var scope = app.Services.CreateScope();
+        var updateService = scope.ServiceProvider.GetRequiredService<TelegramUpdateBackgroundService>();
+        
+        var fakeUpdate = new Update { /* ... */ };
+
+        await updateService.ProcessUpdateAsync(fakeUpdate);
+        await app.WaitForShutdownAsync();
         }
     }
 }
