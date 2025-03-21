@@ -9,7 +9,7 @@ using Telegram.Bot.Types;
 namespace WebHook {
 
     public class TelegramUpdateBackgroundService {
-        public async void ProcessUpdateAsync(Update update) => await TelegramBot.UpdateAsync(update);
+        public async Task ProcessUpdateAsync(Update update) => await TelegramBot.UpdateAsync(update);
     }
 
     public class Program {
