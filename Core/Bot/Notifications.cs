@@ -16,7 +16,7 @@ namespace Core.Bot {
                     string caption = $"🎮 *{value.Title}*\n\n" +
                                      $"📖 *About:*\n" +
                                      $"{value.Description}\n\n" +
-                                     $"💰 *Price:* ~{value.OriginalPrice}~ → Free\n" +
+                                     $"💰 *Price:* {(value.OriginalPrice == "0" ? "Free" : $"~{value.OriginalPrice}~ → Free")} \n" +
                                      $"Start Date: {value.StartDate:MMM dd 'at' hh:mm tt 'UTC'}\n" +
                                      $"End Date: {value.EndDate:MMM dd 'at' hh:mm tt 'UTC'}";
                     InlineKeyboardMarkup replyMarkup = new InlineKeyboardMarkup().AddButton(InlineKeyboardButton.WithUrl("Game Page", value.Page));
