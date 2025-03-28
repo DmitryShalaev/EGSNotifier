@@ -72,13 +72,15 @@ namespace Core.Parser {
                                     return promotionalOffers.Select(promo => {
                                         string title = element.Value<string>("title") ?? string.Empty;
                                         string description = element.Value<string>("description") ?? string.Empty;
-                                        string thumbnail = element["keyImages"]?
-                                            .FirstOrDefault(i => i.Value<string>("type") == "Thumbnail")?
-                                            .Value<string>("url") ?? "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Epic_games_store_logo.svg/800px-Epic_games_store_logo.svg.png";
-                                        string pageSlug = element["catalogNs"]?["mappings"]?
-                                            .FirstOrDefault(i => i.Value<string>("pageType") == "productHome")?
-                                            .Value<string>("pageSlug") ?? string.Empty;
-                                        string originalPrice = element["price"]?["totalPrice"]?["fmtPrice"]?.Value<string>("originalPrice") ?? "₽";
+                                        string thumbnail =
+                                                            element["keyImages"]?.FirstOrDefault(i => i.Value<string>("type") == "Thumbnail")?.Value<string>("url") ??
+                                                            element["keyImages"]?.FirstOrDefault(i => i.Value<string>("type") == "Thumbnail")?.Value<string>("url") ??
+                                                            element["keyImages"]?.FirstOrDefault()?.Value<string>("url") ??
+                                                            "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Epic_games_store_logo.svg/800px-Epic_games_store_logo.svg.png";
+                                        string pageSlug =
+                                                            element.Value<string>("productSlug") ??
+                                                            element["catalogNs"]?["mappings"]?.FirstOrDefault(i => i.Value<string>("pageType") == "productHome")?.Value<string>("pageSlug") ?? string.Empty;
+                                        string originalPrice = element["price"]?["totalPrice"]?["fmtPrice"]?.Value<string>("originalPrice") ?? "$";
 
                                         // Обработка дат
                                         DateTime.TryParseExact(
