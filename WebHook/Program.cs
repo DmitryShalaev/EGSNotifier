@@ -14,6 +14,11 @@ namespace WebHook {
 
     public class Program {
         public static async Task Main(string[] args) {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+            CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
+
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
             builder.Logging.SetMinimumLevel(LogLevel.Warning);
 
