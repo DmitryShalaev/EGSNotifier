@@ -17,8 +17,8 @@ namespace Core.Bot {
                                      $"📖 *About:*\n" +
                                      $"{value.Description}\n\n" +
                                      $"💰 *Price:* {(value.OriginalPrice == "0" ? "Free" : $"~{value.OriginalPrice}~ → Free")} \n" +
-                                     $"Start Date: {value.StartDate:MMM dd 'at' hh:mm tt 'UTC'}\n" +
-                                     $"End Date: {value.EndDate:MMM dd 'at' hh:mm tt 'UTC'}";
+                                     $"Start Date: {value.StartDate.ToUniversalTime():MMM dd 'at' hh:mm tt 'UTC'}\n" +
+                                     $"End Date: {value.EndDate.ToUniversalTime():MMM dd 'at' hh:mm tt 'UTC'}";
                     InlineKeyboardMarkup replyMarkup = new InlineKeyboardMarkup().AddButton(InlineKeyboardButton.WithUrl("Game Page", value.Page));
 
                     foreach(TelegramUser? user in telegramUsers) {

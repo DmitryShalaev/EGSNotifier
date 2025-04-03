@@ -25,7 +25,7 @@
         }
 
         public override bool Equals(object? obj) => Equals(obj as EGS);
-        public bool Equals(EGS? egs) => egs is not null && egs.Title == Title && egs.Description == Description && egs.StartDate.Equals(StartDate) && egs.EndDate.Equals(EndDate);
+        public bool Equals(EGS? egs) => egs is not null && egs.Title == Title && egs.Description == Description;
 
         public static bool operator ==(EGS? left, EGS? right) => left?.Equals(right) ?? false;
         public static bool operator !=(EGS? left, EGS? right) => !(left == right);
@@ -35,10 +35,6 @@
 
             hash += Title.GetHashCode();
             hash += Description.GetHashCode();
-            hash += Page.GetHashCode();
-            hash += OriginalPrice.GetHashCode();
-            hash += StartDate.GetHashCode();
-            hash += EndDate.GetHashCode();
 
             return hash.GetHashCode();
         }

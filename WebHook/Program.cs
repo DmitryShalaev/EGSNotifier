@@ -35,15 +35,15 @@ namespace WebHook {
             app.UseAuthorization();
             app.MapControllers();
 
-            app.RunAsync();
+            _ = app.RunAsync();
 
-        using var scope = app.Services.CreateScope();
-        var updateService = scope.ServiceProvider.GetRequiredService<TelegramUpdateBackgroundService>();
-        
-        var fakeUpdate = new Update { /* ... */ };
+            using IServiceScope scope = app.Services.CreateScope();
+            TelegramUpdateBackgroundService updateService = scope.ServiceProvider.GetRequiredService<TelegramUpdateBackgroundService>();
 
-        await updateService.ProcessUpdateAsync(fakeUpdate);
-        await app.WaitForShutdownAsync();
+            var fakeUpdate = new Update { /* ... */ };
+
+            await updateService.ProcessUpdateAsync(fakeUpdate);
+            await app.WaitForShutdownAsync();
         }
     }
 }
