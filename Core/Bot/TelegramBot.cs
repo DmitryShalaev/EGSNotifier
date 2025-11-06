@@ -1,4 +1,4 @@
-using System.Text.Encodings.Web;
+﻿using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
 
@@ -28,6 +28,7 @@ namespace Core.Bot {
             if(string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("TelegramBotToken")) ||
                string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("TelegramBotConnectionString"))
               ) throw new NullReferenceException("Environment Variable is null");
+
 
             using(ScheduleDbContext dbContext = new())
                 dbContext.Database.Migrate();

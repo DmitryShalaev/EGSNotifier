@@ -1,4 +1,4 @@
-using Core.DB;
+﻿using Core.DB;
 using Core.Parser;
 
 using Quartz;
@@ -8,8 +8,11 @@ namespace Core.Jobs {
     public class UpdateEGSJob : IJob {
 
         public static async Task StartAsync() {
-            using(ScheduleDbContext dbContext = new())
+            int hour = -1;
+            using(ScheduleDbContext dbContext = new()) {
                 await EGSParser.UpdatingEGS(dbContext);
+                hour = dbContext.EGS.OrderBy(i => i.ID).Last().EndDate.ToLocalTime().Hour;
+            }
 
             // Создание фабрики планировщиков
             var schedulerFactory = new StdSchedulerFactory();
@@ -25,7 +28,7 @@ namespace Core.Jobs {
             ITrigger trigger = TriggerBuilder.Create()
                 .WithIdentity("UpdateEGSJobTrigger", "group1") // Уникальный идентификатор триггера
                 .StartNow() // Запуск задания сразу после старта планировщика
-                .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(18, 30))
+                .WithSchedule(CronScheduleBuilder.DailyAtHourAndMinute(hour == -1 ? 20 : hour, 30))
                 .Build();
 
             // Запуск планировщика
