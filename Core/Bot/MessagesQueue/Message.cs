@@ -48,13 +48,13 @@ namespace Core.Bot.MessagesQueue {
             AddMessageToQueue(message);
         }
 
-        public static void SendPhoto(ChatId chatId, InputFile photo, string? caption = null, ReplyMarkup? replyMarkup = null, string? path = null, bool hasSpoiler = false, bool disableNotification = false, ParseMode parseMode = ParseMode.None) {
+        public static void SendPhoto(ChatId chatId, string photo, string? caption = null, ReplyMarkup? replyMarkup = null, string? path = null, bool hasSpoiler = false, bool disableNotification = false, ParseMode parseMode = ParseMode.None) {
             var message = new PhotoMessage(chatId, photo, caption, replyMarkup, path, hasSpoiler, disableNotification, parseMode);
 
             AddMessageToQueue(message);
         }
 
-        public static void SendSharedPhoto(ChatId chatId, InputFile photo, string? caption = null, ReplyMarkup? replyMarkup = null, string? path = null, bool hasSpoiler = false, bool disableNotification = false, ParseMode parseMode = ParseMode.None) {
+        public static void SendSharedPhoto(ChatId chatId, string photo, string? caption = null, ReplyMarkup? replyMarkup = null, string? path = null, bool hasSpoiler = false, bool disableNotification = false, ParseMode parseMode = ParseMode.None) {
             var message = new PhotoMessage(chatId, photo, caption, replyMarkup, path, hasSpoiler, disableNotification, parseMode);
 
             AddMessageToSharedQueue(message);
@@ -149,7 +149,8 @@ namespace Core.Bot.MessagesQueue {
                     case PhotoMessage photoMessage:
                         msg = $"PhotoMessage {photoMessage.ChatId}";
 
-                        await BotClient.SendPhoto(chatId: photoMessage.ChatId, photo: photoMessage.Photo, replyMarkup: photoMessage.ReplyMarkup, caption: photoMessage.Caption, hasSpoiler: photoMessage.HasSpoiler, disableNotification: photoMessage.DisableNotification, parseMode: photoMessage.ParseMode);
+                        //await BotClient.SendPhoto(chatId: photoMessage.ChatId, photo: photoMessage.Photo, replyMarkup: photoMessage.ReplyMarkup, caption: photoMessage.Caption, hasSpoiler: photoMessage.HasSpoiler, disableNotification: photoMessage.DisableNotification, parseMode: photoMessage.ParseMode);
+                        await TgSendExtensions.SendPhotoSmart(BotClient, photoMessage.ChatId, photoMessage.Photo, photoMessage.ReplyMarkup, photoMessage.Caption, photoMessage.HasSpoiler, photoMessage.DisableNotification, photoMessage.ParseMode);
 
                         if(File.Exists(photoMessage.Path)) File.Delete(photoMessage.Path);
 
