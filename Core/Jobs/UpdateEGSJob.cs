@@ -11,7 +11,7 @@ namespace Core.Jobs {
             int hour = -1;
             using(ScheduleDbContext dbContext = new()) {
                 await EGSParser.UpdatingEGS(dbContext);
-                hour = dbContext.EGS.OrderBy(i => i.ID).Last().EndDate.ToLocalTime().Hour;
+                hour = dbContext.EGS.OrderBy(i => i.ID).Last().EndDate.ToLocalTime().Hour + 1;
             }
 
             // Создание фабрики планировщиков
