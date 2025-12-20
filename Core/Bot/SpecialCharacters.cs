@@ -16,8 +16,9 @@ namespace Core.Bot {
             SpecialCharsMap['['] = true;
             SpecialCharsMap['!'] = true;
             SpecialCharsMap['.'] = true;
+            SpecialCharsMap['+'] = true;
         }
-
+         
         /// <summary>
         /// Экранирует специальные символы в переданной строке, добавляя перед ними символ '\'.
         /// </summary>
