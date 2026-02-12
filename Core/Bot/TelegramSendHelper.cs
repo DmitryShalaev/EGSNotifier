@@ -19,7 +19,6 @@ public static class TgSendExtensions {
             Timeout = TimeSpan.FromSeconds(30)
         };
 
-        // иногда CDN режут "ботов" без UA
         client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (compatible; Bot/1.0)");
         return client;
     }
@@ -48,7 +47,7 @@ public static class TgSendExtensions {
                 cancellationToken: ct);
         }
 
-        // 1) Быстрая попытка: пусть Telegram скачает сам (если сможет)
+        // 1) Быстрая попытка
         try {
             return await bot.SendPhoto(
                 chatId: chatId,
@@ -109,7 +108,7 @@ public static class TgSendExtensions {
                 cancellationToken: ct);
         }
 
-        // если это не фото — шлём как документzszs
+        // если это не фото — шлём как документ
         return await bot.SendDocument(
             chatId: chatId,
             document: Telegram.Bot.Types.InputFile.FromStream(ms, fileName),
