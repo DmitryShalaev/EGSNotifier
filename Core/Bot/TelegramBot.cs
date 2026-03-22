@@ -1,4 +1,5 @@
 ﻿using System.Text.Encodings.Web;
+using System.Net;
 using System.Text.Json;
 using System.Text.Unicode;
 
@@ -35,9 +36,11 @@ namespace Core.Bot {
                 dbContext.Database.Migrate();
 
             botClient = new TelegramBotClient(Environment.GetEnvironmentVariable("TelegramBotToken")!, httpClient: new HttpClient(new SocketsHttpHandler() {
+
 #if !DEBUG
-                Proxy = new WebProxy("socks5://127.0.0.1:1080")
+                                              //  Proxy = new WebProxy("socks5://127.0.0.1:9050")
 #endif
+
             }));
 
             Task.Factory.StartNew(Jobs.Job.InitAsync, TaskCreationOptions.LongRunning);
