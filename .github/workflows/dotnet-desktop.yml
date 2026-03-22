@@ -19,13 +19,13 @@ jobs:
         cache: true
         cache-dependency-path: |
           Core/packages.lock.json
-          WebHook/packages.lock.json
+          LongPolling/packages.lock.json
          
     - name: DotNet Restore
       run: dotnet restore --locked-mode
     
     - name: DotNet Publish
-      run: dotnet publish ./WebHook/WebHook.csproj -c Release -r linux-x64 -p:PublishReadyToRun=true --self-contained false
+      run: dotnet publish ./LongPolling/LongPolling.csproj -c Release -r linux-x64 -p:PublishReadyToRun=true --self-contained false
       
     - name: Copy to Server via SCP
       uses: appleboy/scp-action@v0.1.7
@@ -35,7 +35,7 @@ jobs:
         username: ${{ secrets.REMOTE_USER }}
         key: ${{ secrets.REMOTE_SSH_KEY }}
         passphrase: ${{ secrets.PASSPHRASE }}
-        source: /home/runner/work/EGSNotifier/EGSNotifier/WebHook/bin/Release/net9.0/linux-x64/publish/*
+        source: /home/runner/work/EGSNotifier/EGSNotifier/LongPolling/bin/Release/net9.0/linux-x64/publish/*
         target: /var/EGSNotifierBot_temp
         rm: true
       

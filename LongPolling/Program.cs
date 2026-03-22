@@ -9,10 +9,10 @@ using Telegram.Bot.Polling;
 
 namespace LongPolling {
     internal class Program {
-        static async Task Main() {
+        private static async Task Main() {
             CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
 
-
+            await TelegramBot.botClient.DeleteWebhook();
             TelegramBot.botClient.ReceiveAsync(
                 (botClient, update, cancellationToken) => TelegramBot.UpdateAsync(update),
                 (botClient, update, cancellationToken) => Task.CompletedTask,
@@ -26,7 +26,6 @@ namespace LongPolling {
                 },
                 new CancellationTokenSource().Token
             ).Wait();
-
 
             using(ScheduleDbContext dbContext = new()) {
 
