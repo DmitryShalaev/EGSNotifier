@@ -36,9 +36,9 @@ namespace Core.Bot {
                 dbContext.Database.Migrate();
 
             botClient = new TelegramBotClient(Environment.GetEnvironmentVariable("TelegramBotToken")!, httpClient: new HttpClient(new SocketsHttpHandler() {
-                //#if !DEBUG
-                //                Proxy = new WebProxy("socks5://127.0.0.1:1080")
-                //#endif
+#if !DEBUG
+                                Proxy = new WebProxy("socks5://127.0.0.1:40000")
+#endif
             }));
 
             Task.Factory.StartNew(Jobs.Job.InitAsync, TaskCreationOptions.LongRunning);
